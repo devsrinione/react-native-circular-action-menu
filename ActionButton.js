@@ -250,7 +250,11 @@ export default class ActionButton extends Component {
       >
         {backdrop}
 
-        {this.props.children && this.renderActions()}
+        // {this.props.children && this.renderActions()}
+          
+        <View style={this.getActionContainerOverlay()}>
+          {this.props.children && this.renderActions()}
+        </View>
         <View
           pointerEvents="box-none"
           style={this.getActionContainerStyle()}
