@@ -10,7 +10,67 @@ import {
 import PropTypes from 'prop-types';
 
 export default class ActionButtonItem extends Component {
+  
+_renderTitle() {
+    if (!this.props.title) return null;
 
+    const {
+      textContainerStyle,
+      hideLabelShadow,
+      offsetX,
+      parentSize,
+      size,
+      position,
+      spaceBetween
+    } = this.props;
+    const offsetTop = Math.max(size / 2 - TEXT_HEIGHT / 2, 0);
+    const positionStyles = { top: offsetTop };
+    const hideShadow = hideLabelShadow === undefined
+      ? this.props.hideShadow
+      : hideLabelShadow;
+
+    if (position !== "center") {
+      positionStyles[position] =
+        offsetX + (parentSize - size) / 2 + size + spaceBetween;
+    } else {
+      positionStyles.right = WIDTH / 2 + size / 2 + spaceBetween;
+    }
+
+    const textStyles = [
+      styles.textContainer,
+      positionStyles,
+      !hideShadow && shadowStyle,
+      textContainerStyle
+    ];
+
+    const title = (
+      React.isValidElement(this.props.title) ?
+        this.props.title
+      : (
+        <Text
+          allowFontScaling={false}
+          style={[styles.text, this.props.textStyle]}
+        >
+          {this.props.title}
+        </Text>
+      )
+    )
+
+    return (
+      <TextTouchable
+        background={touchableBackground(
+          this.props.nativeFeedbackRippleColor,
+          this.props.fixNativeFeedbackRadius
+        )}
+        activeOpacity={this.props.activeOpacity || DEFAULT_ACTIVE_OPACITY}
+        onPress={this.props.onPress}
+      >
+        <View style={textStyles}>
+          {title}
+        </View>
+      </TextTouchable>
+    );
+  }
   render() {
     const offsetX = this.props.radius * Math.cos(this.props.angle);
     const offsetY = this.props.radius * Math.sin(this.props.angle);
@@ -55,6 +115,7 @@ export default class ActionButtonItem extends Component {
           >
             {this.props.children}
           </View>
+            {this._renderTitle()}
         </TouchableOpacity>
       </Animated.View>
     );
