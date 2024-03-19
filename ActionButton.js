@@ -11,7 +11,11 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import ActionButtonItem from './ActionButtonItem';
-
+ const defaultConfig = {
+      actionOverlay:{
+        bottom:70
+      }
+  }
 const alignMap = {
   center: {
     alignItems: 'center',
@@ -54,7 +58,10 @@ export default class ActionButton extends Component {
   getActionButtonStyle() {
     return [styles.actionBarItem, this.getButtonSize()];
   }
-
+  getActionContainerOverlay() {
+    const {bottomDistance} = this.props
+    return [styles.buttonActionOverlay, {bottom:(bottomDistance)?bottomDistance:defaultConfig.actionOverlay.bottom}];
+  }
   getActionContainerStyle() {
     const {alignItems, justifyContent} = alignMap[this.props.position];
     return [styles.overlay, styles.actionContainer, {
@@ -298,6 +305,10 @@ ActionButton.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  buttonActionOverlay:{
+    position:"absolute",
+    bottom:100
+  },
   overlay: {
     position: 'absolute',
     bottom: 0,
